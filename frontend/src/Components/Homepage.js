@@ -29,8 +29,10 @@ export function Homepage() {
       });
   }, []);
 
+
+
   //////////////////////////////////////////////////////////////////////
-  /* 
+  /* HTML SECTION
   The return call below is what we see on the web browser page. We use 
   map function to display each course individually
   */
