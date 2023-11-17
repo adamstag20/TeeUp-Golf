@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Course } from "./Course";
+import { Course, Course2 } from "./Course";
 import axios from "axios";
 
 export function Homepage() {
@@ -13,7 +13,7 @@ export function Homepage() {
   // This is our array where course objects are stored. setCourses is
   // a function call that sets the courses variable for us
   const [courses, setCourses] = useState([]);
-
+  const [Selected_courses, setSelectedCourse] = useState([]);
   // useEffect tells the frontend to go grab the courses data from backend
   // when homepage is loaded into browser
   useEffect(() => {
@@ -22,6 +22,7 @@ export function Homepage() {
       .get("http://127.0.0.1:8000/api/course/")
       .then((response) => {
         setCourses(response.data);
+        setSelectedCourse(response.data[0])
         console.log(response);
       })
       .catch((error) => {
@@ -29,6 +30,9 @@ export function Homepage() {
       });
   }, []);
 
+  const handleChange = (event) => {
+    setSelectedCourse(event.target.value);
+  };
 
 
   //////////////////////////////////////////////////////////////////////
@@ -39,9 +43,12 @@ export function Homepage() {
   //////////////////////////////////////////////////////////////////////
   return (
     <div className="App">
+      <select value={Selected_courses} onChange={handleChange}>
       {courses.map((courses) => (
-        <Course key={courses.id} course={courses} />
+     <option key={courses.id} value={courses.id}>{courses.name}
+     </option>
       ))}
+      </select>
     </div>
   );
-}
+};
