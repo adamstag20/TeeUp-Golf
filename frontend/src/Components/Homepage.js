@@ -13,7 +13,7 @@ export function Homepage() {
   // This is our array where course objects are stored. setCourses is
   // a function call that sets the courses variable for us
   const [courses, setCourses] = useState([]);
-  const [Selected_courses, setSelectedCourse] = useState([]);
+  const [Selected_course, setSelectedCourse] = useState([]);
   // useEffect tells the frontend to go grab the courses data from backend
   // when homepage is loaded into browser
   useEffect(() => {
@@ -31,7 +31,9 @@ export function Homepage() {
   }, []);
 
   const handleChange = (event) => {
-    setSelectedCourse(event.target.value);
+    const courseId = Number(event.target.value);
+    const course = courses.find((course) => course.id === courseId);
+    setSelectedCourse(course);
   };
 
 
@@ -43,12 +45,73 @@ export function Homepage() {
   //////////////////////////////////////////////////////////////////////
   return (
     <div className="App">
-      <select value={Selected_courses} onChange={handleChange}>
-      {courses.map((courses) => (
-     <option key={courses.id} value={courses.id}>{courses.name}
-     </option>
-      ))}
-      </select>
+      <header style={{
+        backgroundColor: '#ccc',
+        padding: '20px',
+        fontSize: '30px',
+        textAlign: 'center',
+        marginBottom: '40px',
+        width: '100%'
+      }}>
+        Tee-Up Golf
+      </header>
+      <div style={{
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        padding: '16px',
+        margin: '16px auto',
+        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
+        transition: '0.3s',
+        width: 'auto',
+        backgroundColor: '#f1f1f1',
+        display: 'inline-block'
+      }}>
+        <h4 style={{marginBottom: '20px'}}>Courses</h4>
+        <select onChange={handleChange}>
+          {courses.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+        {Selected_course && (
+          <div style={{
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            padding: '16px',
+            margin: '16px 0',
+            boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
+            transition: '0.3s',
+            width: '70%',
+            backgroundColor: '#f1f1f1'
+          }}>
+            <h2 style={{
+              backgroundColor: '#ccc',
+              margin: '-16px -16px 16px -16px',
+              padding: '16px',
+              fontSize: '20px',
+              textAlign: 'center'
+            }}>
+              {Selected_course.name}
+            </h2>
+            <p style={{marginBottom: '8px', fontSize: '14px'}}>{Selected_course.description}</p>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+              <div>
+                <p style={{marginBottom: '8px'}}>Difficulty: {Selected_course.diff}</p>
+                <p style={{marginBottom: '8px'}}>Number of Holes: {Selected_course.holes}</p>
+                <p style={{marginBottom: '8px'}}>Driving Range: {String(Selected_course.driving_range)}</p>
+              </div>
+              <div>
+                <p style={{marginBottom: '8px'}}>Food: {String(Selected_course.food)}</p>
+                <p style={{marginBottom: '8px'}}>Phone: {Selected_course.phone}</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
+    
 };
