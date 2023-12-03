@@ -21,8 +21,11 @@ from course import views
 
 router = routers.DefaultRouter()
 router.register(r'course', views.CourseView, 'course')
+router.register(r'TeeTime', views.TeeTimeView, 'TeeTime')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('teetimes/<int:course>/', views.getTeeTimeByCourse)
 ]
+
