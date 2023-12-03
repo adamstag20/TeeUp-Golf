@@ -20,4 +20,7 @@ def getTeeTimeByCourse(request, course):
     teeTimesList = list(teeTimes)
     return JsonResponse(teeTimesList, safe=False)
 
-    
+def getTeeTimeByCourseAndDay(request, course, date):
+    teeTimes = TeeTime.objects.filter(course = course, date = date).values()
+    teeTimeList = list(teeTimes)
+    return JsonResponse(teeTimeList, safe= False)

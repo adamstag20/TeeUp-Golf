@@ -15,17 +15,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, register_converter
 from rest_framework import routers
 from course import views
-
+from datetime import date, datetime
 router = routers.DefaultRouter()
 router.register(r'course', views.CourseView, 'course')
 router.register(r'TeeTime', views.TeeTimeView, 'TeeTime')
 
+class DateConverter:
+      regex = r"\d{4}-\d{1,2}-\d{1,2}"
+      format = "%Y-%m-%d"
+
+      def to_python(self, value: str) -> date:
+          return datetime.strptime(value, self.format).date()
+
+      def to_url(self, value: date) -> str:
+          return value.strftime(self.format)
+
+register_converter(DateConverter, "date")
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('teetimes/<int:course>/', views.getTeeTimeByCourse)
+    path('teetimes/<int:course>/', views.getTeeTimeByCourse),
+    path('teetimes/<int:course>/<date:date>/', views.getTeeTimeByCourseAndDay) 
 ]
 
