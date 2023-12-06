@@ -1,4 +1,4 @@
-SPRING_CAL = [
+export const SPRING_CAL = [
   "07:30:00",
   "07:40:00",
   "07:50:00",

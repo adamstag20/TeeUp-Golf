@@ -8,7 +8,7 @@ export function NavBar() {
       <Link to="/">Courses</Link>
     </li>
     <li>
-      <Link to="/cats">Calendar</Link>
+      <Link to="/calendar">Calendar</Link>
     </li>
   </div>
   );
