@@ -7,12 +7,47 @@ import "../Styles/calendarStyles.css";
 export function TimeSlotList() {
   const [slotList, setSlotList] = useState([]);
 
+  function parse(){
+
+    let compareCal = []
+
+    for (let i= 0; i < SPRING_CAL.length; i++){
+      
+      let cut = 0
+      if (SPRING_CAL[i].length >= 8){
+        cut = SPRING_CAL[i].slice(0,5)
+      }
+      else {
+        cut = SPRING_CAL[i].slice(0,4)
+      }
+      let val = cut.split(":")
+      
+      let time = SPRING_CAL[i].slice(5,7)
+      console.log(time)
+      if (time == 'PM' && val[0] != 12){
+        val[0] = Number(val[0]) + 12
+        cut =  val[0] + ":" + val[1] + ":00"
+        compareCal.push(cut)
+      }
+      else if ( val[0] == 11 || val[0] == 10 || val[0] == 12){
+        cut =  val[0] + ":" + val[1] + ":00"
+        compareCal.push(cut) 
+      }
+      else {
+        cut = "0" + val[0] + ":" + val[1] + ":00"
+        compareCal.push(cut)
+      }
+
+    }
+    console.log("List -> ", compareCal)
+  }
+
   async function getTimeSlots() {
     axios
     .get("http://127.0.0.1:8000/teetimes/5/2023-12-21/")
     .then((response) => {
       setSlotList(response.data)
-      console.log(response);
+      console.log(response.data);
     })
     .catch((error) => {
       console.error(error);
@@ -20,7 +55,8 @@ export function TimeSlotList() {
   };
 
   useEffect(() => {
-    getTimeSlots()
+    //getTimeSlots()
+    parse()
   }, []);
 
 
