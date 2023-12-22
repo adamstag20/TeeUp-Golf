@@ -1,8 +1,10 @@
 import React from "react";
-import { SPRING_CAL } from "../Data/Calendars";
+import { SPRING_CAL, MONTHS } from "../Data/Calendars";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Calendar from 'react-calendar'
 import "../Styles/calendarStyles.css";
+import 'react-calendar/dist/Calendar.css';
 
 export function TimeSlotList() {
 
@@ -10,6 +12,7 @@ export function TimeSlotList() {
   const [slotList, setSlotList] = useState([]);
   const [genList, setGenList] = useState([]);
   const [takenList, setTakenList] = useState([]);
+  const [date, setDate] = useState(new Date());
 
   // Create function to update slotList onCLick
   function slotListCompare(takenSlots, openSlots) {
@@ -59,8 +62,16 @@ export function TimeSlotList() {
   }
 
   function getTimeSlots() {
+
+
+    let day = date.getDate()
+    let month = date.getMonth() + 1
+    let year = date.getFullYear()
+    const compareDate =  year+'-'+month+'-'+day
+    console.log(compareDate)
+
     axios
-      .get("http://127.0.0.1:8000/teetimes/5/2023-12-21/")
+      .get(`http://127.0.0.1:8000/teetimes/5/${compareDate}/`)
       .then((response) => {
         setSlotList(slotListCompare(response.data, parse()))
         console.log(response.data);
@@ -71,12 +82,15 @@ export function TimeSlotList() {
   }
 
   useEffect(() => {
-    getTimeSlots()
+    //getTimeSlots()
   }, []);
 
   return (
     <div className="slot-body">
       <ul>
+
+        <Calendar onChange={setDate} value = {date}/> 
+        <button onClick = {()=> getTimeSlots()}> Click me! </button>
         <h2>Time Slots</h2>
         {slotList != null &&
           slotList.map((timeSlot, index) => (
@@ -84,7 +98,6 @@ export function TimeSlotList() {
               {timeSlot}
             </div>
           ))}
-        <button > Click me! </button>
       </ul>
     </div>
   );
