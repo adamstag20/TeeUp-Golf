@@ -7,7 +7,7 @@ import "../Styles/calendarStyles.css";
 import "react-calendar/dist/Calendar.css";
 
 export function TimeSlotList() {
-  const [slotList, setSlotList] = useState([]);
+  const [slotList, setSlotList] = useState();
   const [date, setDate] = useState(new Date());
   const [displayDate, setDisplayDate] = useState();
 
@@ -79,19 +79,20 @@ export function TimeSlotList() {
   }
 
   const [show, setShow] = useState(false);
+
   function CalendarDisplay() {
    
     if (show) {
       return (
-        <div>
+        <div className = 'calendar-select-date'>
           <Calendar onChange={setDate} value={date} />
           <button onClick={() => {getTimeSlots(); setShow(false)}}> OK </button>
         </div>
       );
     }
     return (
-      <div className ='calendar-items'>
-          <text className= 'item' onClick={() => {setShow(true)}}>view calendar </text>
+      <div className ='calendar-date-selected'>
+          <text className= 'calendar-select-display' onClick={() => {setShow(true)}}>view calendar </text>
           <h2>Tee Times for: {displayDate}</h2>
       </div>
     );
@@ -105,16 +106,17 @@ export function TimeSlotList() {
     <div className="slot-body">
       <ul>
         <CalendarDisplay />
-        {slotList != null &&
-        /*
-          slotList.map((timeSlot, index) => (
-            <div className="slot" key={index}>
-              {timeSlot}
-            </div>
-          ))
-          */
-         <div> </div>
-        }
+        { slotList ? (
+            slotList.map((timeSlot, index) => (
+              <div className="slot" key={index}>
+                {timeSlot}
+              </div>
+            ))
+        ):(
+          <div>No Date Selected!</div>
+        )}
+
+        
       </ul>
     </div>
   );
